@@ -55,8 +55,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 // Show a message to the user
                 Toast.makeText(ProductDetailActivity.this, product.getName() + " added to cart", Toast.LENGTH_SHORT).show();
 
-                // Optional: Navigate to the cart or close the activity
-                finish(); // Closes the product detail activity and returns to the previous activity
+                finish();
 
             }
         });

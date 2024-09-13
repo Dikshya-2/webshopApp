@@ -42,6 +42,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation ("com.h2database:h2:2.1.214")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

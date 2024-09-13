@@ -6,17 +6,14 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 
+import java.util.HashMap;
+import java.util.Map;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,25 +25,35 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-    private ListView listView;
+    private GridView gridView;
     private List<Product> productList;
     private ProductAdapter adapter;
+    private Map<Integer, Class<?>> menuItemToActivityMap;
     // private ArrayAdapter<String> adapter;
-    String url= "http://192.168.0.233:8080/";
+       //String url= "http://192.168.0.233:8080/";
+        //String url= "http://192.168.1.184:8080/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        listView = findViewById(R.id.product_list);
+        menuItemToActivityMap = new HashMap<>();
+        menuItemToActivityMap.put(R.id.main, MainActivity.class);
+        menuItemToActivityMap.put(R.id.menu_item_cart, CartActivity.class);
+        menuItemToActivityMap.put(R.id.menu_item_admin, AdminFormActivity.class);
+        menuItemToActivityMap.put(R.id.main_login, LoginActivity.class);
+
+
+
+        gridView = findViewById(R.id.product_list);
         productList = new ArrayList<>();
         adapter = new ProductAdapter(this, productList);
         // adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new ArrayList<>());
-        listView.setAdapter(adapter);
+        gridView.setAdapter(adapter);
 
-        Retrofit retrofit= new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
-
+//        Retrofit retrofit= new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
+       Retrofit retrofit = RetrofitClient.getClient();
         ProductApi productApi =retrofit.create(ProductApi.class);
         Call<List<Product>> call =productApi.getAllProducts();
         call.enqueue(new Callback<List<Product>>() {
@@ -76,13 +83,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Product selectedProduct = productList.get(position);
                 Intent intent = new Intent(MainActivity.this, ProductDetailActivity.class);
                 intent.putExtra("product", selectedProduct);
                 startActivity(intent);
+                //finish();
+
             }
         });
 
@@ -90,18 +99,13 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.main) {
-                    // Navigate to HomeActivity
-                    Intent homeIntent = new Intent(MainActivity.this, MainActivity.class);
-                    startActivity(homeIntent);
-                    return true;
-                } else if (item.getItemId() == R.id.menu_item_cart) {
-                    // Navigate to CartActivity
-                    Intent cartIntent = new Intent(MainActivity.this, CartActivity.class);
-                    startActivity(cartIntent);
+                Class<?> activityClass = menuItemToActivityMap.get(item.getItemId());
+                if (activityClass != null) {
+                    Intent intent = new Intent(MainActivity.this, activityClass);
+                    startActivity(intent);
+                    //finish();
                     return true;
                 }
-                // Handle other menu items or return false if no item matches
                 return false;
             }
         });

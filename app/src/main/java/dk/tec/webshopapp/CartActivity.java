@@ -58,8 +58,8 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-        private void updateTotalPrice () {
-            double totalPrice = cart.getTotalPrice();
-            totalPriceTextView.setText(String.format("Total: Kr%.2f", totalPrice));
-        }
+    private void updateTotalPrice () {
+        double totalPrice = cart.getTotalPrice();
+        totalPriceTextView.setText(String.format("Total: Kr%.2f", totalPrice));
     }
+}

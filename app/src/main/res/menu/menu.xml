@@ -13,9 +13,11 @@
         android:title="Cart"
         />
     <item
-        android:title="Search"
+        android:title="Login"
+        android:id="@+id/main_login"
         android:icon="@drawable/baseline_search_24"/>
     <item
+        android:id="@+id/menu_item_admin"
         android:title="Profile"
         android:icon="@drawable/baseline_person_pin_24"/>
 </menu>

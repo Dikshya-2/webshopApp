@@ -21,8 +21,12 @@ public interface ProductApi {
     @POST("product")
     Call<Void> createProduct(@Body Product product);
 
-    @PUT("product")
-    Call<Void> updateProduct(@Body Product product);
+    //    @PUT("/product/{id}")
+//    //Call<Void> updateProduct(@Body Product product);
+//    Call<Void> updateProduct(@Path("id") int id);
+    @PUT("/product/{id}")
+    Call<Void> updateProduct(@Path("id") int id, @Body Product product);
+
 
     @DELETE("product/{id}")
     Call<Void> deleteProduct(@Path("id") int id);
